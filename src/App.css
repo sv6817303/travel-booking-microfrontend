@@ -1,0 +1,4 @@
+/* Vite template overrides removed — full-width layout is controlled in App shell. */
+#root {
+  min-height: 100vh;
+}

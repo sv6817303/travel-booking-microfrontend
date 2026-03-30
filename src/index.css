@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@theme {
+  /* MakeMyTrip-inspired brand */
+  --color-mmt-50: #e6f4ff;
+  --color-mmt-100: #b3deff;
+  --color-mmt-500: #008cff;
+  --color-mmt-600: #0078e0;
+  --color-mmt-700: #0066c7;
+  --color-mmt-bg: #f2f2f2;
+
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+
+  --color-secondary-50: #f0f9ff;
+  --color-secondary-100: #e0f2fe;
+  --color-secondary-200: #bae6fd;
+  --color-secondary-300: #7dd3fc;
+  --color-secondary-400: #38bdf8;
+  --color-secondary-500: #0ea5e9;
+  --color-secondary-600: #0284c7;
+  --color-secondary-700: #0369a1;
+  --color-secondary-800: #075985;
+  --color-secondary-900: #0c4a6e;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5;
+  color: #1a1a1a;
+  background-color: #f2f2f2;
+  min-height: 100vh;
+}
+
+/* react-datepicker — align with brand */
+.react-datepicker {
+  font-family: inherit !important;
+  border: 1px solid #e5e5e5 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+.react-datepicker__header {
+  background: var(--color-mmt-500) !important;
+  border-bottom: none !important;
+  border-radius: 8px 8px 0 0 !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name {
+  color: #fff !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background: var(--color-mmt-500) !important;
+  color: #fff !important;
+}
+
+.react-datepicker__day:hover {
+  background: var(--color-mmt-50) !important;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
