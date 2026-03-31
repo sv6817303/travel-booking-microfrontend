@@ -50,7 +50,8 @@ const FlightResultsPage = () => {
           setResults([]);
           return;
         }
-        setResults(response.data as Flight[]);
+        // Legacy page retained but no longer routed. Keep it harmless if imported elsewhere.
+        setResults((response.data || []) as Flight[]);
       } catch (e: any) {
         setError(e?.message || 'API not reachable. Start backend on port 5000.');
         setResults([]);

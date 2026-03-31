@@ -9,21 +9,11 @@ const SimpleHeader = () => {
   const location = useLocation();
 
   const navigation = [
-    { name: 'Flights', href: '/search/flights' },
+    { name: 'Flights', href: '/flights' },
     { name: 'Hotels', href: '/search/hotels' },
-    { name: 'Holidays', href: '/destinations' },
-    { name: 'Cabs', href: '/cabs' },
-    { name: 'Buses', href: '/bus-ticket' },
-    { name: 'Trains', href: '/travel' },
-    { name: 'Insurance', href: '/insurance' },
   ];
 
-  const moreNav = [
-    { name: 'Itinerary', href: '/itinerary' },
-    { name: 'Weather', href: '/weather' },
-    { name: 'Gallery', href: '/gallery' },
-    { name: 'For Business', href: '/business-travel' },
-  ];
+  // extra modules removed for MVP
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#e7e7e7] shadow-[0_1px_4px_rgba(0,0,0,0.06)]">
@@ -104,7 +94,7 @@ const SimpleHeader = () => {
       {isMenuOpen && (
         <div className="lg:hidden border-t border-[#e7e7e7] bg-white max-h-[min(70vh,calc(100dvh-56px))] overflow-y-auto shadow-lg">
           <div className="px-4 py-3 space-y-1">
-            {[...navigation, ...moreNav].map((item) => (
+            {navigation.map((item) => (
               <Link
                 key={`${item.href}-${item.name}`}
                 to={item.href}

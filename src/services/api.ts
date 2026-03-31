@@ -61,6 +61,8 @@ export const searchService = {
 
 export const detailsService = {
     flightById: async (id: string) => {
+        // Flight details endpoint not part of flight-search MVP.
+        // Keep for future extension; backend currently does not implement `/api/flights/:id`.
         const response = await api.get(`/flights/${id}`);
         return response.data;
     },

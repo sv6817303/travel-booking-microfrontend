@@ -41,11 +41,8 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-bold text-lg mb-6">Quick Links</h3>
             <ul className="space-y-3 text-sm">
-              <li><Link to="/search" className="hover:text-white transition-colors">Search hotels</Link></li>
-              <li><Link to="/destinations" className="hover:text-white transition-colors">Destinations</Link></li>
-              <li><Link to="/cabs" className="hover:text-white transition-colors">Cabs</Link></li>
-              <li><Link to="/bus-ticket" className="hover:text-white transition-colors">Buses</Link></li>
-              <li><Link to="/travel" className="hover:text-white transition-colors">Trains / Travel</Link></li>
+              <li><Link to="/search/hotels" className="hover:text-white transition-colors">Hotels</Link></li>
+              <li><Link to="/flights" className="hover:text-white transition-colors">Flights</Link></li>
             </ul>
           </div>
 
@@ -54,8 +51,6 @@ const Footer = () => {
             <h3 className="text-white font-bold text-lg mb-6">Support</h3>
             <ul className="space-y-3 text-sm">
               <li><Link to="/profile" className="hover:text-white transition-colors">My trips</Link></li>
-              <li><Link to="/insurance" className="hover:text-white transition-colors">Travel insurance</Link></li>
-              <li><Link to="/business-travel" className="hover:text-white transition-colors">For business</Link></li>
               <li><Link to="/login" className="hover:text-white transition-colors">Login</Link></li>
               <li><Link to="/signup" className="hover:text-white transition-colors">Create account</Link></li>
             </ul>

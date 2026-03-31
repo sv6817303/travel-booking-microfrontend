@@ -1,5 +1,3 @@
-// Legacy controller file kept for compatibility.
-// Canonical data shape is aligned with `/api/flights` MVP contract.
 const flights = require('../data/flightsMockData');
 
 function normalize(s) {
@@ -8,6 +6,7 @@ function normalize(s) {
 
 exports.listFlights = (req, res) => {
   const { from, to } = req.query;
+
   const fromQ = normalize(from);
   const toQ = normalize(to);
 
@@ -18,12 +17,5 @@ exports.listFlights = (req, res) => {
   });
 
   res.json({ success: true, data: filtered });
-};
-
-exports.getFlightById = (req, res) => {
-  const { id } = req.params;
-  const found = flights.find((f) => f.id === id);
-  if (!found) return res.status(404).json({ success: false, message: 'Flight not found' });
-  res.json({ success: true, data: found });
 };
 
