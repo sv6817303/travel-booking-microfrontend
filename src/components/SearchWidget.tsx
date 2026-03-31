@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { Button } from './ui/Button';
 import { cn } from '../lib/utils';
 import { GuestSelector } from './GuestSelector';
+import { isNonEmpty } from '../shared/utils/validation';
 
 type SearchType = 'flights' | 'hotels' | 'cabs' | 'buses';
 
@@ -23,6 +24,7 @@ const SearchWidget = () => {
   const [flightFrom, setFlightFrom] = useState('');
   const [flightTo, setFlightTo] = useState('');
   const [flightDate, setFlightDate] = useState<Date | null>(new Date());
+  const [error, setError] = useState<string>('');
 
   const tabs = [
     { id: 'flights' as const, label: 'Flights', icon: Plane },
@@ -37,7 +39,20 @@ const SearchWidget = () => {
   };
 
   const handleSearch = () => {
+    setError('');
     if (activeTab === 'hotels') {
+      if (!isNonEmpty(hotelLocation)) {
+        setError('Please enter a destination city.');
+        return;
+      }
+      if (!checkInDate || !checkOutDate) {
+        setError('Please select check-in and check-out dates.');
+        return;
+      }
+      if (checkInDate && checkOutDate && checkOutDate <= checkInDate) {
+        setError('Check-out date must be after check-in date.');
+        return;
+      }
       const params = new URLSearchParams({
         destination: hotelLocation,
         checkIn: checkInDate?.toISOString() || '',
@@ -48,6 +63,18 @@ const SearchWidget = () => {
       });
       navigate(`/search/hotels?${params.toString()}`);
     } else if (activeTab === 'flights') {
+      if (!isNonEmpty(flightFrom) || !isNonEmpty(flightTo)) {
+        setError('Please enter both From and To cities.');
+        return;
+      }
+      if (flightFrom.trim().toLowerCase() === flightTo.trim().toLowerCase()) {
+        setError('From and To cannot be the same.');
+        return;
+      }
+      if (!flightDate) {
+        setError('Please select a departure date.');
+        return;
+      }
       const params = new URLSearchParams({
         from: flightFrom,
         to: flightTo,
@@ -92,6 +119,11 @@ const SearchWidget = () => {
         </div>
 
         <div className="p-4 md:p-5">
+          {error && (
+            <div className="mb-3 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm font-semibold">
+              {error}
+            </div>
+          )}
           {activeTab === 'hotels' && (
             <div className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-3 items-stretch">
               <div className="md:col-span-4">

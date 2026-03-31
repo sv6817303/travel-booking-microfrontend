@@ -146,7 +146,7 @@ const HomePage = () => {
                     <div className="flex justify-between items-center pt-4 border-t border-gray-100">
                       <div>
                         <span className="text-xs text-gray-500 uppercase font-semibold">Starting from</span>
-                        <div className="text-lg font-bold text-mmt-500">₹{destination.estimatedBudget.budget.toLocaleString('en-IN')}</div>
+                        <div className="text-lg font-bold text-mmt-500">${destination.estimatedBudget.budget.toLocaleString('en-US')}</div>
                       </div>
                       <Button size="sm" variant="secondary" className="group-hover:bg-mmt-50 group-hover:text-mmt-500">
                         Explore

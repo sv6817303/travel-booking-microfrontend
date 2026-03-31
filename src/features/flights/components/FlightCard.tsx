@@ -1,6 +1,7 @@
 import { Button } from '../../../components/ui/Button';
 import type { Flight } from '../types';
 import { ArrowRight, Clock3, Plane } from 'lucide-react';
+import { formatUSDFromINR } from '../../../shared/utils/currency';
 
 export type FlightCardProps = {
   flight: Flight;
@@ -48,7 +49,7 @@ export function FlightCard({ flight, onSelect }: FlightCardProps) {
 
       <div className="md:w-56 flex md:flex-col items-center md:items-end justify-between md:justify-center gap-3">
         <div className="text-xl font-extrabold text-gray-900">
-          ₹{flight.price.toLocaleString('en-IN')}
+          {formatUSDFromINR(flight.price)}
         </div>
         <Button
           variant="outline"

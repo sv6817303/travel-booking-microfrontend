@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
@@ -6,6 +6,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ArrowRightLeft, Calendar, MapPin, Plane } from 'lucide-react';
 import { cn } from '../../../lib/utils';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 export type FlightSearchWidgetProps = {
   className?: string;
@@ -30,28 +32,47 @@ export function FlightSearchWidget({
 }: FlightSearchWidgetProps) {
   const navigate = useNavigate();
 
-  const [from, setFrom] = useState(defaultFrom);
-  const [to, setTo] = useState(defaultTo);
-  const [date, setDate] = useState<Date | null>(defaultDate);
   const [tripType, setTripType] = useState<'oneway' | 'roundtrip'>('oneway');
   const [travellers, setTravellers] = useState(1);
   const [cabinClass, setCabinClass] = useState<'Economy' | 'Premium Economy' | 'Business'>('Economy');
-
-  const canSearch = useMemo(() => from.trim() && to.trim() && date, [from, to, date]);
+  const formik = useFormik({
+    initialValues: {
+      from: defaultFrom,
+      to: defaultTo,
+      date: defaultDate,
+    },
+    validationSchema: Yup.object({
+      from: Yup.string().trim().required('Enter a departure city.'),
+      to: Yup.string()
+        .trim()
+        .required('Enter a destination city.')
+        .test('not-same', 'From and To cannot be the same.', function (value) {
+          const from = String(this.parent.from || '').trim().toLowerCase();
+          const to = String(value || '').trim().toLowerCase();
+          return from && to ? from !== to : true;
+        }),
+      date: Yup.date().required('Select a departure date.'),
+    }),
+    onSubmit: (values) => {
+      const params = new URLSearchParams({
+        from: values.from.trim(),
+        to: values.to.trim(),
+        date: toYmd(values.date),
+      });
+      navigate(`/search/flights?${params.toString()}`);
+    },
+    validateOnBlur: true,
+    validateOnChange: true,
+  });
 
   const swap = () => {
-    setFrom(to);
-    setTo(from);
+    const prevFrom = formik.values.from;
+    formik.setFieldValue('from', formik.values.to);
+    formik.setFieldValue('to', prevFrom);
   };
 
   const onSearch = () => {
-    if (!canSearch) return;
-    const params = new URLSearchParams({
-      from: from.trim(),
-      to: to.trim(),
-      date: toYmd(date),
-    });
-    navigate(`/search/flights?${params.toString()}`);
+    formik.submitForm();
   };
 
   const shell =
@@ -137,13 +158,16 @@ export function FlightSearchWidget({
                   From
                 </label>
                 <Input
-                  value={from}
-                  onChange={(e) => setFrom(e.target.value)}
+                  name="from"
+                  value={formik.values.from}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   placeholder="Delhi"
                   className="h-auto border-0 p-0 focus-visible:ring-0 text-[15px] font-semibold placeholder:text-gray-400"
                 />
               </div>
             </div>
+            {formik.touched.from && formik.errors.from && <p className="mt-1 text-xs font-semibold text-red-600">{formik.errors.from}</p>}
           </div>
 
           <div className="md:col-span-1 flex md:items-end justify-center pb-1 md:pb-2">
@@ -165,13 +189,16 @@ export function FlightSearchWidget({
                   To
                 </label>
                 <Input
-                  value={to}
-                  onChange={(e) => setTo(e.target.value)}
+                  name="to"
+                  value={formik.values.to}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   placeholder="Mumbai"
                   className="h-auto border-0 p-0 focus-visible:ring-0 text-[15px] font-semibold placeholder:text-gray-400"
                 />
               </div>
             </div>
+            {formik.touched.to && formik.errors.to && <p className="mt-1 text-xs font-semibold text-red-600">{formik.errors.to}</p>}
           </div>
 
           <div className="md:col-span-3">
@@ -182,14 +209,16 @@ export function FlightSearchWidget({
                   Departure
                 </label>
                 <DatePicker
-                  selected={date}
-                  onChange={(d) => setDate(d)}
+                  selected={formik.values.date}
+                  onChange={(d) => formik.setFieldValue('date', d)}
+                  onBlur={formik.handleBlur}
                   dateFormat="dd MMM yyyy"
                   className="w-full bg-transparent text-[15px] font-semibold text-gray-900 focus:outline-none leading-tight cursor-pointer"
                   minDate={new Date()}
                 />
               </div>
             </div>
+            {formik.touched.date && formik.errors.date && <p className="mt-1 text-xs font-semibold text-red-600">{String(formik.errors.date)}</p>}
           </div>
 
           <div className="md:col-span-12">
@@ -197,7 +226,7 @@ export function FlightSearchWidget({
               type="button"
               className="w-full h-[52px] rounded-xl bg-mmt-500 hover:bg-mmt-600 text-white font-extrabold text-base border-0 shadow-none"
               onClick={onSearch}
-              disabled={!canSearch}
+              disabled={!formik.isValid}
             >
               Search Flights
             </Button>
