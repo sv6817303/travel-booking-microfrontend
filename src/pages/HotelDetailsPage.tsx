@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'reac
 import { Button } from '../components/ui/Button';
 import { detailsService } from '../services/api';
 import { Check, MapPin, Star } from 'lucide-react';
+import { formatUSDFromINR } from '../shared/utils/currency';
 
 type Hotel = {
   id: string;
@@ -168,7 +169,7 @@ const HotelDetailsPage = () => {
                 <div className="border border-[#ebebeb] rounded-lg p-4 bg-[#fbfbfb]">
                   <p className="text-xs text-gray-500">Price per night</p>
                   <div className="text-2xl font-extrabold text-gray-900 mt-1">
-                    ₹{Math.round(hotel.price * 90).toLocaleString('en-IN')}
+                    {formatUSDFromINR(hotel.price)}
                   </div>
                   <p className="text-xs text-gray-500 mt-1">Taxes extra</p>
                   <Button

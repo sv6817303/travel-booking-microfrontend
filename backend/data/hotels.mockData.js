@@ -1,0 +1,48 @@
+module.exports = [
+  {
+    id: 'HT001',
+    name: 'Grand Palace Hotel',
+    city: 'Manali',
+    price: 3500,
+    rating: 4.5,
+    amenities: ['wifi', 'parking', 'restaurant'],
+    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800',
+  },
+  {
+    id: 'HT002',
+    name: 'Sea View Resort',
+    city: 'Goa',
+    price: 5000,
+    rating: 4.8,
+    amenities: ['wifi', 'pool', 'bar'],
+    image: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800',
+  },
+  {
+    id: 'HT003',
+    name: 'Mountain Breeze Stay',
+    city: 'Manali',
+    price: 2800,
+    rating: 4.1,
+    amenities: ['wifi', 'breakfast', 'parking'],
+    image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800',
+  },
+  {
+    id: 'HT004',
+    name: 'City Central Inn',
+    city: 'Delhi',
+    price: 4200,
+    rating: 4.3,
+    amenities: ['wifi', 'restaurant', 'gym'],
+    image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800',
+  },
+  {
+    id: 'HT005',
+    name: 'Lakeside Retreat',
+    city: 'Udaipur',
+    price: 6200,
+    rating: 4.7,
+    amenities: ['wifi', 'pool', 'parking', 'restaurant'],
+    image: 'https://images.unsplash.com/photo-1551887373-6d4c6f8a9bf4?w=800',
+  },
+];
+

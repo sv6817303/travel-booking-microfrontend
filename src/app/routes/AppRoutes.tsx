@@ -4,7 +4,7 @@ import HomePage from '../../pages/HomePage';
 import LoginPage from '../../pages/LoginPage';
 import SignUpPage from '../../pages/SignUpPage';
 import ProfilePage from '../../pages/ProfilePage';
-import HotelResultsPage from '../../pages/HotelResultsPage';
+import HotelsSearchPage from '../../features/hotels/pages/HotelsSearchPage';
 import HotelDetailsPage from '../../pages/HotelDetailsPage';
 import BookingPage from '../../pages/BookingPage';
 import PaymentPage from '../../pages/PaymentPage';
@@ -18,7 +18,7 @@ export function AppRoutes() {
       <Route element={<Layout />}>
         {/* Core MVP modules (local) */}
         <Route path="/" element={<HomePage />} />
-        <Route path="/search/hotels" element={<HotelResultsPage />} />
+        <Route path="/search/hotels" element={<HotelsSearchPage />} />
         <Route path="/hotel/:id" element={<HotelDetailsPage />} />
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/payment" element={<PaymentPage />} />

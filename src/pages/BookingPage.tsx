@@ -3,6 +3,9 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { authService } from '../services/api';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { normalizePhone } from '../shared/utils/validation';
 
 type BookingType = 'hotel' | 'flight';
 
@@ -42,31 +45,45 @@ const BookingPage = () => {
 
   const currentUser = authService.getCurrentUser();
 
-  const [form, setForm] = useState({
-    fullName: currentUser?.name || '',
-    email: currentUser?.email || '',
-    phone: '',
-  });
   const [error, setError] = useState('');
+  const formik = useFormik({
+    initialValues: {
+      fullName: currentUser?.name || '',
+      email: currentUser?.email || '',
+      phone: '',
+    },
+    validationSchema: Yup.object({
+      fullName: Yup.string().trim().required('Full name is required.'),
+      email: Yup.string().trim().email('Enter a valid email.').required('Email is required.'),
+      phone: Yup.string()
+        .transform((v) => normalizePhone(v))
+        .min(10, 'Enter a valid phone number.')
+        .max(15, 'Enter a valid phone number.')
+        .required('Phone is required.'),
+    }),
+    onSubmit: (values) => {
+      setError('');
+      if (!type || !id) {
+        setError('Invalid booking request.');
+        return;
+      }
+      const payload = {
+        type,
+        itemId: id,
+        traveller: {
+          fullName: values.fullName.trim(),
+          email: values.email.trim(),
+          phone: normalizePhone(values.phone),
+        },
+        meta: Object.fromEntries(searchParams.entries()),
+      };
+      navigate(`/payment?${new URLSearchParams({ draft: JSON.stringify(payload) }).toString()}`);
+    },
+    validateOnBlur: true,
+    validateOnChange: true,
+  });
 
-  const canContinue = Boolean(type && id && form.fullName.trim() && form.email.trim() && form.phone.trim());
-
-  const onContinue = () => {
-    setError('');
-    if (!canContinue) {
-      setError('Please fill all traveller details.');
-      return;
-    }
-
-    const payload = {
-      type,
-      itemId: id,
-      traveller: form,
-      meta: Object.fromEntries(searchParams.entries()),
-    };
-
-    navigate(`/payment?${new URLSearchParams({ draft: JSON.stringify(payload) }).toString()}`);
-  };
+  const canContinue = Boolean(type && id) && formik.isValid && Object.keys(formik.touched).length > 0;
 
   return (
     <div className="min-h-screen bg-[#f2f2f2] py-6">
@@ -102,15 +119,41 @@ const BookingPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-bold text-gray-600 mb-1">Full name</label>
-                <Input value={form.fullName} onChange={(e) => setForm((p) => ({ ...p, fullName: e.target.value }))} />
+                <Input
+                  name="fullName"
+                  value={formik.values.fullName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.fullName && formik.errors.fullName && (
+                  <p className="mt-2 text-sm text-red-600">{String(formik.errors.fullName)}</p>
+                )}
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-600 mb-1">Email</label>
-                <Input type="email" value={form.email} onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))} />
+                <Input
+                  type="email"
+                  name="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.email && formik.errors.email && (
+                  <p className="mt-2 text-sm text-red-600">{String(formik.errors.email)}</p>
+                )}
               </div>
               <div className="md:col-span-2">
                 <label className="block text-xs font-bold text-gray-600 mb-1">Phone</label>
-                <Input value={form.phone} onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))} placeholder="10-digit mobile number" />
+                <Input
+                  name="phone"
+                  value={formik.values.phone}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  placeholder="Phone number"
+                />
+                {formik.touched.phone && formik.errors.phone && (
+                  <p className="mt-2 text-sm text-red-600">{String(formik.errors.phone)}</p>
+                )}
               </div>
             </div>
 
@@ -120,7 +163,7 @@ const BookingPage = () => {
                   Cancel
                 </Button>
               </Link>
-              <Button className="w-full sm:w-auto font-bold" onClick={onContinue} disabled={!canContinue}>
+              <Button className="w-full sm:w-auto font-bold" onClick={() => formik.submitForm()} disabled={!canContinue}>
                 Continue to payment
               </Button>
             </div>

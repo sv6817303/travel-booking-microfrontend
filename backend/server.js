@@ -17,7 +17,7 @@ app.use('/api/search', require('./routes/searchRoutes')); // legacy
 
 // MVP routes (clean)
 app.use('/api/flights', require('./routes/flights.route'));
-app.use('/api/hotels', require('./routes/hotelsRoutes'));
+app.use('/api/hotels', require('./routes/hotels.route'));
 app.use('/api/bookings', require('./routes/bookingsRoutes'));
 
 // Basic route

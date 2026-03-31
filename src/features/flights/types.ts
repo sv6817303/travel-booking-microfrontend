@@ -6,7 +6,7 @@ export type Flight = {
   departureTime: string; // "HH:mm"
   arrivalTime: string; // "HH:mm"
   duration: string; // "2h 05m"
-  price: number; // INR
+  price: number; // INR (displayed as USD in UI)
 };
 
 export type FlightsSearchParams = {
